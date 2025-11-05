@@ -1,0 +1,127 @@
+{
+  "lessonId": "lesson4",
+  "title": "Arduino Sensors & Control Structures - Quiz",
+  "description": "Test your knowledge of includes, constants, LDRs, and decision-making structures in Arduino.",
+  "questions": [
+    {
+      "id": "l4q1",
+      "question": "What does the #include directive do in Arduino?",
+      "options": [
+        "Defines a constant value",
+        "Includes external libraries or core Arduino code",
+        "Starts the Serial Monitor",
+        "Declares a function prototype"
+      ],
+      "answerIndex": 1,
+      "explanation": "#include is used to bring in external libraries or Arduino’s core functionality."
+    },
+    {
+      "id": "l4q2",
+      "question": "Which of these correctly includes the Servo motor library?",
+      "options": [
+        "#include <Servo.h>",
+        "#include Servo.h",
+        "import Servo.h",
+        "use Servo.h"
+      ],
+      "answerIndex": 0,
+      "explanation": "The correct syntax is #include <Servo.h>."
+    },
+    {
+      "id": "l4q3",
+      "question": "What is a function prototype?",
+      "options": [
+        "A complete function with body",
+        "A declaration of a function before it is defined",
+        "A built-in Arduino keyword",
+        "A variable that cannot change"
+      ],
+      "answerIndex": 1,
+      "explanation": "A function prototype tells the compiler a function exists before it is defined."
+    },
+    {
+      "id": "l4q4",
+      "question": "What does the const keyword do?",
+      "options": [
+        "Creates a variable that can change",
+        "Creates a variable that cannot change",
+        "Declares a function",
+        "Imports a library"
+      ],
+      "answerIndex": 1,
+      "explanation": "const makes a variable value fixed so it cannot be modified after initialization."
+    },
+    {
+      "id": "l4q5",
+      "question": "What type of sensor is an LDR?",
+      "options": [
+        "Temperature sensor",
+        "Light sensor",
+        "Sound sensor",
+        "Pressure sensor"
+      ],
+      "answerIndex": 1,
+      "explanation": "An LDR (Light Dependent Resistor) detects light intensity."
+    },
+    {
+      "id": "l4q6",
+      "question": "What does analogRead(LDR_PIN) return?",
+      "options": [
+        "A value between 0 and 255",
+        "A value between 0 and 1023",
+        "Only HIGH or LOW",
+        "The frequency of light"
+      ],
+      "answerIndex": 1,
+      "explanation": "analogRead() returns values from 0 to 1023 representing voltage on the analog pin."
+    },
+    {
+      "id": "l4q7",
+      "question": "Which structure runs code only if a condition is true, otherwise runs something else?",
+      "options": [
+        "for loop",
+        "switch–case",
+        "if–else",
+        "while loop"
+      ],
+      "answerIndex": 2,
+      "explanation": "if–else lets Arduino decide between two blocks of code."
+    },
+    {
+      "id": "l4q8",
+      "question": "When is switch–case more useful than if–else?",
+      "options": [
+        "When you have only one condition",
+        "When you need to loop infinitely",
+        "When checking many possible values of one variable",
+        "When declaring constants"
+      ],
+      "answerIndex": 2,
+      "explanation": "switch–case is cleaner for handling multiple options of a single variable."
+    },
+    {
+      "id": "l4q9",
+      "question": "What is the difference between Serial.print() and Serial.println()?",
+      "options": [
+        "Serial.print() sends text, Serial.println() cannot",
+        "Serial.println() adds a new line, Serial.print() does not",
+        "Serial.print() is faster",
+        "They are exactly the same"
+      ],
+      "answerIndex": 1,
+      "explanation": "Serial.print() keeps printing on the same line, Serial.println() adds a newline at the end."
+    },
+    {
+      "id": "l4q10",
+      "question": "If an LDR value is below LDR_LOW, what happens in the tryThisCode example?",
+      "options": [
+        "LED turns Green",
+        "LED turns Blue",
+        "LED turns Red",
+        "LED stays White"
+      ],
+      "answerIndex": 2,
+      "explanation": "If light is below LDR_LOW, setRGBColor(255, 0, 0) makes the LED Red."
+    }
+  ]
+}

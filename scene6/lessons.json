@@ -1,0 +1,134 @@
+{
+  "pinDefinitionsContents": [
+    "#define RGB_RED   9\n#define RGB_GREEN 10\n#define RGB_BLUE  11\n\n#define: Gives a name to a number.\n\nHere we name pin 9 as RGB_RED, \npin 10 as RGB_GREEN, and \npin 11 as RGB_BLUE.\n\nThis makes the code easier to read \ninstead of writing \"pin 9\" everywhere.\n\nThese pins are PWM-capable (they can \nchange brightness, not just on/off).",
+    "setup() explanation here...",
+    "loop() explanation here...",
+    "pinMode() explanation here...",
+    "digitalWrite() explanation here...",
+    "digitalRead() explanation here...",
+    "analogWrite() explanation here...",
+    "analogRead() explanation here...",
+    "delay() explanation here...",
+    "Serial.begin() explanation here..."
+  ],
+  "lessonConfigs": {
+  "lesson1": {
+  "labels": [
+    "#define",
+    "setup()",
+    "loop()",
+    "pinMode()",
+    "setRGBColor()",
+    "analogWrite()",
+    "analogRead()",
+    "delay()"
+  ],
+  "contents": [
+    "#define\n\nWhat it is: \nA preprocessor directive in C/C++ \nthat replaces a word with a constant value before the program is compiled.\n\nHow it works: \nWhen the compiler sees RGB_RED, it substitutes it with 8 everywhere in the code.\n\nWhy useful:\n Instead of hard-coding numbers (magic numbers), we use names that describe their purpose. \nThis makes the program easier to read and maintain.\nIf you ever change the pin, you only edit it once at the top.\n\nExample:\n#define RGB_RED 8   // Name pin 8 as RGB_RED\n#define RGB_GREEN 7 // Name pin 7 as RGB_GREEN\n#define RGB_BLUE 11 // Name pin 11 as RGB_BLUE\n\nSo later in the program, writing pinMode(RGB_RED, OUTPUT); \nis much clearer than pinMode(8, OUTPUT);.",
+    "setup()\n\nWhat it is: A special function in Arduino that runs only once at the beginning of the program (after reset or power-on).\n\nPurpose: Used for all initial settings like declaring pin modes, starting serial communication, and setting default values.\n\nHow it works: After setup() finishes, Arduino automatically jumps to loop() and never comes back to setup().\n\nWhy useful: Separates initialization code from the main running code, keeping programs structured.\n\nExample:\nvoid setup() {\n  pinMode(RGB_RED, OUTPUT);\n  pinMode(RGB_GREEN, OUTPUT);\n  pinMode(RGB_BLUE, OUTPUT);\n\n  setRGBColor(255, 255, 255); // LED starts white\n}",
+    "loop()\n\nWhat it is: The main function in Arduino that runs over and over forever.\n\nHow it works: After setup() finishes, Arduino enters loop(). When it reaches the end, it starts loop() again from the top.\n\nWhy useful: It allows your Arduino to react continuously (blink LEDs, read sensors, control motors, etc.).\n\nExample:\nvoid loop() {\n  setRGBColor(255, 0, 0);   // Red\n  delay(1000);              // Wait 1 sec\n  setRGBColor(0, 255, 0);   // Green\n  delay(1000);\n  setRGBColor(0, 0, 255);   // Blue\n  delay(1000);\n}",
+    "pinMode()\n\nWhat it is: A built-in Arduino function that tells a pin whether it should be used for INPUT or OUTPUT.\n\nHow it works: OUTPUT means the pin sends signals (to LEDs, motors, etc.). INPUT means the pin listens (from buttons, sensors, etc.).\n\nWhy useful: Prevents errors — Arduino must know the role of each pin before it’s used.\n\nExample:\nvoid setup() {\n  pinMode(RGB_RED, OUTPUT);   // Red pin sends signal to LED\n  pinMode(RGB_GREEN, OUTPUT); // Green pin sends signal to LED\n  pinMode(RGB_BLUE, OUTPUT);  // Blue pin sends signal to LED\n}",
+    "setRGBColor()\n\nWhat it is: A custom function we wrote. Not built into Arduino.\n\nPurpose: Simplifies code by grouping three analogWrite() commands into one reusable function.\n\nHow it works: Accepts three numbers (0–255) for red, green, and blue. Then writes these values to the LED pins to mix a color.\n\nWhy useful: Instead of writing analogWrite() three times everywhere, we just call setRGBColor(). Easier, shorter, less error-prone.\n\nExample:\nvoid setRGBColor(int red, int green, int blue) {\n  analogWrite(RGB_RED, red);\n  analogWrite(RGB_GREEN, green);\n  analogWrite(RGB_BLUE, blue);\n}",
+    "analogWrite()\n\nWhat it is: A built-in Arduino function that outputs a PWM signal (Pulse Width Modulation) on certain pins.\n\nHow it works: Even though Arduino doesn’t have true analog voltage output, PWM rapidly switches the pin on and off so fast that devices (like LEDs or motors) see it as variable brightness or speed.\n\nRange: Value can be 0–255.\n   - 0 = always off\n   - 255 = always on (full brightness)\n   - 128 = about 50% brightness\n\nWhy useful: Lets us dim LEDs or control motor speeds smoothly.\n\nExample:\nanalogWrite(RGB_RED, 128);  // Half brightness red\nanalogWrite(RGB_GREEN, 255); // Full brightness green",
+    "analogRead()\n\nWhat it is: A built-in Arduino function that reads a value from an analog input pin (A0–A5 on most boards).\n\nHow it works: Measures voltage (0–5V usually) and converts it to a number between 0 and 1023.\n\nWhy useful: Lets Arduino understand sensor data (light, temperature, potentiometers, etc.).\n\nExample:\nvoid loop() {\n  int sensorValue = analogRead(A0);  // Read sensor on pin A0\n  int brightness = map(sensorValue, 0, 1023, 0, 255); // Convert to 0–255\n  analogWrite(RGB_BLUE, brightness); // Adjust LED brightness with sensor\n  delay(100);\n}",
+    "delay()\n\nWhat it is: A built-in Arduino function that pauses the program for a set time (milliseconds).\n\nHow it works: Arduino does nothing else during this pause.\n\nTime: 1000 ms = 1 second.\n\nWhy useful: Used to create blinking, timing sequences, or slow down loops.\n\nExample:\nvoid loop() {\n  setRGBColor(255, 255, 255); // White\n  delay(1000);                // Wait 1 second\n  setRGBColor(255, 0, 255);   // Purple\n  delay(1000);                // Wait 1 second\n}"
+  ],
+  "tryThisCode": "#define RGB_RED 8\n#define RGB_GREEN 7\n#define RGB_BLUE 11\n\nvoid setup() {\n  // Initialize pins\n  pinMode(RGB_RED, OUTPUT);\n  pinMode(RGB_GREEN, OUTPUT);\n  pinMode(RGB_BLUE, OUTPUT);\n\n  // Set initial RGB color for IR mode\n  setRGBColor(255, 255, 255); // White for IR mode\n}\n\nvoid setRGBColor(int red, int green, int blue) {\n  analogWrite(RGB_RED, red);\n  analogWrite(RGB_GREEN, green);\n  analogWrite(RGB_BLUE, blue);\n}\n\nvoid loop() {\n  setRGBColor(255, 255, 255); // White\n  delay(1000);\n  setRGBColor(255, 0, 255);   // Purple\n  delay(1000);\n}\n"
+}
+,
+    "lesson2": {
+  "labels": [
+    "tone()",
+    "noTone()",
+    "millis()",
+    "for loop",
+    "volatile"
+  ],
+  "contents": [
+    "tone()\n\nWhat it is: A built-in Arduino function that generates a square wave (sound) of a specific frequency (in Hz) on a pin connected to a buzzer or speaker.\n\nHow it works: You call tone(pin, frequency, duration). The buzzer then plays that note.\n\nWhy useful: Lets Arduino make music, alarms, or feedback sounds.\n\nExample:\ntone(BUZZER_PIN, 440, 500); // Play A4 (440Hz) for 0.5 seconds",
+
+    "noTone()\n\nWhat it is: A built-in Arduino function that stops any sound being played on a pin by tone().\n\nHow it works: When called, it turns off the signal going to the buzzer.\n\nWhy useful: Needed to silence the buzzer or end a note early.\n\nExample:\nnoTone(BUZZER_PIN); // Stop buzzer sound",
+
+    "millis()\n\nWhat it is: A built-in Arduino function that returns the number of milliseconds since the board was powered on or reset.\n\nHow it works: It continuously increases over time and resets after about 50 days.\n\nWhy useful: Used for non-blocking timing instead of delay(). This lets you do multiple things at once while still keeping track of time.\n\nExample:\nunsigned long startTime = millis();\nwhile (millis() - startTime < 1000) {\n  // wait 1 second without using delay()\n}",
+
+    "for loop\n\nWhat it is: A control structure in C/C++ that repeats a block of code a set number of times.\n\nHow it works: for(initialization; condition; increment) { code }\n\nWhy useful: Perfect for repeating patterns, like playing through a melody or updating LEDs.\n\nExample:\nfor (int i = 0; i < 8; i++) {\n  tone(BUZZER_PIN, melody[i], 250);\n  delay(300);\n}",
+
+    "volatile\n\nWhat it is: A keyword in C/C++ used before a variable declaration.\n\nHow it works: Tells the compiler that the variable can change unexpectedly (for example, inside an interrupt). This prevents the compiler from making optimizations that could cause errors.\n\nWhy useful: Ensures safe and reliable use of variables that might be modified in the background.\n\nExample:\nvolatile unsigned long lastInterruptTime = 0; // Safe to use inside interrupts"
+  ],
+  "tryThisCode": "#define BUZZER_PIN 4 // Buzzer pin\n\n// Melody definition (frequencies in Hz and durations in ms)\nconst int melody[] = {262, 294, 330, 349, 392, 440, 494, 523};        // C4 to C5\nconst int noteDurations[] = {250, 250, 250, 250, 250, 250, 250, 250}; // Quarter notes\nconst int melodyLength = 8;\nvolatile unsigned long lastInterruptTime = 0; // For debouncing\n\nvoid setup() {\n  pinMode(BUZZER_PIN, OUTPUT);\n}\n\nvoid toggleMode() {\n  noTone(BUZZER_PIN);\n}\n\nvoid playMelody() {\n  for (int i = 0; i < melodyLength; i++) {\n    tone(BUZZER_PIN, melody[i], noteDurations[i]);\n    unsigned long startTime = millis();\n    while (millis() - startTime < noteDurations[i] * 1.3) {\n      noTone(BUZZER_PIN);\n      return;\n    }\n  }\n  noTone(BUZZER_PIN);\n}\nvoid loop() {\n  playMelody();\n}\n"
+},
+   "lesson3": {
+"labels": [
+  "Serial.begin()",
+  "Serial.println()",
+  "PWM"
+],
+"contents": [
+  "Serial.begin()\n\nWhat it is: A built-in Arduino function that starts the serial communication between the Arduino and your computer.\n\nHow it works: You pass a number for speed (called baud rate). Common is 9600, which means 9600 bits per second.\n\nWhy useful: Lets Arduino send messages to the Serial Monitor for debugging or data logging.\n\nExample:\nvoid setup() {\n  Serial.begin(9600); // Start communication\n  Serial.println(\"Program started\");\n}",
+
+  "Serial.println()\n\nWhat it is: A built-in Arduino function that sends text or numbers from the Arduino to your computer.\n\nHow it works: Anything inside Serial.println() appears in the Serial Monitor, followed by a new line.\n\nWhy useful: Helps you debug by printing sensor values, motor states, or custom messages.\n\nExample:\nSerial.println(\"Motors stopped\");\nSerial.println(speedValue);",
+
+  "DC Motor Control with PWM\n\nWhat it is: Using analogWrite() with motor driver pins to control speed and direction of DC motors.\n\nHow it works:\n- Each motor has two pins (A and B). One pin HIGH (or PWM > 0) and the other LOW makes it spin in one direction.\n- Reversing which pin gets PWM flips the direction.\n- Giving both pins 0 stops the motor.\n- PWM value (0–255) controls speed.\n\nWhy useful: With just two pins per motor, you can fully control forward, backward, stop, and speed.\n\nExample:\n// Forward at full speed\nanalogWrite(MOTOR1_A, 0);\nanalogWrite(MOTOR1_B, 255);\n\n// Backward at half speed\nanalogWrite(MOTOR1_A, 128);\nanalogWrite(MOTOR1_B, 0);\n\n// Stop motor\nanalogWrite(MOTOR1_A, 0);\nanalogWrite(MOTOR1_B, 0);"
+],
+  "tryThisCode": "#define MOTOR1_A 5    // Left motor\n#define MOTOR1_B 6\n#define MOTOR2_A 9    // Right motor\n#define MOTOR2_B 10\n\nvoid setup() {\n  pinMode(MOTOR1_A, OUTPUT);\n  pinMode(MOTOR1_B, OUTPUT);\n  pinMode(MOTOR2_A, OUTPUT);\n  pinMode(MOTOR2_B, OUTPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  analogWrite(MOTOR1_A, 0);\n  analogWrite(MOTOR1_B, 0);\n  analogWrite(MOTOR2_A, 0);\n  analogWrite(MOTOR2_B, 0);\n  Serial.println(\"Motors stopped\");\n  delay(1000);\n\n  analogWrite(MOTOR1_A, 0);\n  analogWrite(MOTOR1_B, 255);\n  analogWrite(MOTOR2_A, 255);\n  analogWrite(MOTOR2_B, 0);\n  Serial.println(\"Moving forward\");\n  delay(1000);\n\n  analogWrite(MOTOR1_A, 255);\n  analogWrite(MOTOR1_B, 0);\n  analogWrite(MOTOR2_A, 255);\n  analogWrite(MOTOR2_B, 0);\n  Serial.println(\"Moving backward\");\n  delay(1000);\n}"
+},
+    "lesson4": {
+"labels": [
+  "#include",
+  "Function prototype",
+  "const keyword",
+  "LDR",
+  "if–else",
+  "switch–case",
+  "Serial.print()"
+],
+"contents": [
+  "#include\n\nWhat it is: A preprocessor directive used to include external libraries or the Arduino core.\n\nHow it works: `#include <Arduino.h>` gives access to Arduino functions. `#include <IRremote.h>` adds IR remote control functions from the library.\n\nWhy useful: Libraries extend Arduino with ready-made code for sensors, motors, communication, etc.\n\nExample:\n#include <Arduino.h>\n#include <Servo.h>  // Include Servo motor library",
+
+  "Function prototype\n\nWhat it is: A declaration of a function before it is defined.\n\nHow it works: Placed at the top of the code so the compiler knows the function exists, even if its full body is written later.\n\nWhy useful: Keeps the code organized when functions are defined after `setup()` and `loop()`.\n\nExample:\nvoid setRGBColor(int red, int green, int blue);",
+
+  "const keyword\n\nWhat it is: A keyword in C/C++ that makes a variable value constant (cannot be changed after initialization).\n\nHow it works: Used for fixed values like thresholds or pin numbers.\n\nWhy useful: Prevents accidental changes to values that should stay the same.\n\nExample:\nconst int LDR_LOW = 300;\nconst int LDR_HIGH = 700;",
+
+  "LDR (Light Dependent Resistor)\n\nWhat it is: A sensor that changes resistance with light intensity.\n\nHow it works: Connected to an analog pin, `analogRead()` measures a value from 0 (dark) to 1023 (bright).\n\nWhy useful: Lets Arduino detect light levels for automatic night lights, alarms, or brightness controls.\n\nExample:\nint ldrValue = analogRead(A7);\nSerial.println(ldrValue);",
+
+  "if–else\n\nWhat it is: A control structure that runs code only if a condition is true, otherwise runs alternative code.\n\nHow it works: Arduino checks the condition and chooses the matching block.\n\nWhy useful: Allows decision-making based on sensor values.\n\nExample:\nif (ldrValue < LDR_LOW) {\n  setRGBColor(255, 0, 0);\n} else {\n  setRGBColor(0, 255, 0);\n}",
+
+  "switch–case\n\nWhat it is: A control structure that selects one block of code from many options, based on a variable.\n\nHow it works: Arduino checks the variable and jumps to the matching case.\n\nWhy useful: Cleaner than writing many if–else statements when handling multiple modes.\n\nExample:\nswitch (currentMode) {\n  case LDR_MODE:\n    handleLDR();\n    break;\n  case IR_MODE:\n    // IR control code\n    break;\n}",
+
+  "Serial.print()\n\nWhat it is: A function that sends text or numbers to the Serial Monitor without moving to a new line.\n\nHow it works: Unlike Serial.println(), it keeps printing on the same line until you add another print/println.\n\nWhy useful: Useful for printing sensor data with labels.\n\nExample:\nSerial.print(\"LDR Value: \");\nSerial.println(ldrValue);"
+],
+"tryThisCode": "#include <Arduino.h>\n#include <IRremote.h>\n\n#define RGB_RED 8\n#define RGB_GREEN 7\n#define RGB_BLUE 11\n#define LDR_PIN A7\n\nconst int LDR_LOW = 300;\nconst int LDR_HIGH = 700;\n\nvoid setRGBColor(int red, int green, int blue);\n\nvoid setup() {\n  pinMode(RGB_RED, OUTPUT);\n  pinMode(RGB_GREEN, OUTPUT);\n  pinMode(RGB_BLUE, OUTPUT);\n  pinMode(LDR_PIN, INPUT);\n\n  Serial.begin(9600);\n  setRGBColor(255, 255, 255);\n  Serial.println(\"Started in LDR Mode - RGB: White\");\n}\n\nvoid setRGBColor(int red, int green, int blue) {\n  analogWrite(RGB_RED, red);\n  analogWrite(RGB_GREEN, green);\n  analogWrite(RGB_BLUE, blue);\n}\n\nvoid handleLDR() {\n  int ldrValue = analogRead(LDR_PIN);\n  Serial.print(\"LDR Value: \");\n  Serial.println(ldrValue);\n\n  if (ldrValue < LDR_LOW) {\n    setRGBColor(255, 0, 0);\n    Serial.println(\"Low Light -> Red\");\n  } else if (ldrValue < LDR_HIGH) {\n    setRGBColor(0, 255, 0);\n    Serial.println(\"Medium Light -> Green\");\n  } else {\n    setRGBColor(0, 0, 255);\n    Serial.println(\"High Light -> Blue\");\n  }\n  delay(200);\n}\n\nvoid loop() {\n  handleLDR();\n}\n"
+},
+   "lesson5": {
+"labels": [
+  "enum",
+  "volatile",
+  "attachInterrupt()",
+  "Debouncing",
+  "IRremote library",
+  "Motor acceleration",
+  "tone() and noTone()",
+  "switch–case with IR codes"
+],
+"contents": [
+  "enum\n\nWhat it is: A way to create a set of named constants (enumeration).\n\nHow it works: Defines a variable that can only take one of the listed values.\n\nWhy useful: Makes mode selection (IR_MODE, MUSIC_MODE, LDR_MODE) more readable and safer than using numbers.\n\nExample:\nenum Mode { IR_MODE, MUSIC_MODE, LDR_MODE };\nMode currentMode = IR_MODE;",
+
+  "volatile\n\nWhat it is: A keyword in C/C++ that tells the compiler a variable may change unexpectedly (e.g., in an interrupt).\n\nHow it works: Prevents compiler optimizations that could ignore changes to the variable.\n\nWhy useful: Needed when variables are modified inside an interrupt function (e.g., currentMode, lastInterruptTime).\n\nExample:\nvolatile Mode currentMode = IR_MODE;",
+
+  "attachInterrupt()\n\nWhat it is: A function that runs a special function automatically when a pin changes state.\n\nHow it works: Uses hardware interrupts instead of constantly checking the pin in loop().\n\nWhy useful: Allows instant response to a button press for changing modes.\n\nExample:\nattachInterrupt(digitalPinToInterrupt(BUTTON_PIN), toggleMode, FALLING);",
+
+  "Debouncing\n\nWhat it is: A method to prevent false multiple button presses caused by mechanical noise.\n\nHow it works: Use a time delay (like DEBOUNCE_DELAY) before accepting another press.\n\nWhy useful: Ensures stable button mode switching.\n\nExample:\nif (millis() - lastInterruptTime > DEBOUNCE_DELAY) { ... }",
+
+  "IRremote library\n\nWhat it is: A library to receive and decode IR remote signals.\n\nHow it works: `IrReceiver.decode()` checks for a new signal, and `IrReceiver.decodedIRData.decodedRawData` gives the button's code.\n\nWhy useful: Makes it easy to use any IR remote control with Arduino.\n\nExample:\nif (IrReceiver.decode()) {\n  unsigned long code = IrReceiver.decodedIRData.decodedRawData;\n  Serial.println(code, HEX);\n  IrReceiver.resume();\n}",
+
+  "Motor acceleration\n\nWhat it is: Gradually increasing motor speed instead of instantly setting it.\n\nHow it works: Uses a for-loop to raise PWM values step by step.\n\nWhy useful: Prevents jerky starts and protects the motors from stress.\n\nExample:\nfor (int speed = 0; speed <= 255; speed += 25) {\n  analogWrite(MOTOR1_A, speed);\n  delay(20);\n}",
+
+  "tone() and noTone()\n\nWhat it is: Functions to play sounds on a buzzer.\n\nHow it works: `tone(pin, frequency, duration)` plays a note, and `noTone(pin)` stops it.\n\nWhy useful: Allows Arduino to play melodies or sound effects.\n\nExample:\ntone(BUZZER_PIN, 440, 500);\ndelay(500);\nnoTone(BUZZER_PIN);",
+
+  "switch–case with IR codes\n\nWhat it is: A decision structure to run different motor functions depending on which button is pressed.\n\nHow it works: Each IR code is matched to a specific case (Forward, Backward, Left, Right, Stop).\n\nWhy useful: Organizes remote control commands neatly and avoids long if–else chains.\n\nExample:\nswitch (irCode) {\n  case Forward: moveForward(); break;\n  case Backward: moveBackward(); break;\n  case Left: turnLeft(); break;\n  case Right: turnRight(); break;\n  case Stop: stopMotors(); break;\n}"
+],
+ "tryThisCode": "#include <Arduino.h>\n#include <IRremote.h>\n\n#define RECV_PIN 12\n#define MOTOR1_A 5\n#define MOTOR1_B 6\n#define MOTOR2_A 9\n#define MOTOR2_B 10\n#define BUTTON_PIN 2\n\n// IR receiver setup\nIRrecv irrecv(RECV_PIN);\ndecode_results results;\n\n// IR codes (example values)\nconst unsigned long Forward = 0xBF40FD02;\nconst unsigned long Backward = 0xB748FD02;\nconst unsigned long Right = 0xFB04FD02;\nconst unsigned long Left = 0xB847FD02;\nconst unsigned long Stop = 0xFA05FD02;\n\n// Mode variables\nenum Mode { IR_MODE, MUSIC_MODE, LDR_MODE };\nvolatile Mode currentMode = IR_MODE;\nvolatile unsigned long lastInterruptTime = 0;\nconst int DEBOUNCE_DELAY = 1000;\n\nvoid toggleMode();\nvoid stopMotors();\n\nvoid setup() {\n  pinMode(MOTOR1_A, OUTPUT);\n  pinMode(MOTOR1_B, OUTPUT);\n  pinMode(MOTOR2_A, OUTPUT);\n  pinMode(MOTOR2_B, OUTPUT);\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n\n  irrecv.enableIRIn();\n  attachInterrupt(digitalPinToInterrupt(BUTTON_PIN), toggleMode, FALLING);\n  Serial.begin(9600);\n}\n\nvoid toggleMode() {\n  unsigned long currentTime = millis();\n  if (currentTime - lastInterruptTime > DEBOUNCE_DELAY) {\n    if (currentMode == IR_MODE) {\n      currentMode = MUSIC_MODE;\n      Serial.println(\"Switched to Music Mode\");\n      irrecv.disableIRIn();\n      stopMotors();\n    } else {\n      currentMode = IR_MODE;\n      Serial.println(\"Switched to IR Mode\");\n      irrecv.enableIRIn();\n    }\n    lastInterruptTime = currentTime;\n  }\n}\n\nvoid stopMotors() {\n  analogWrite(MOTOR1_A, 0);\n  analogWrite(MOTOR1_B, 0);\n  analogWrite(MOTOR2_A, 0);\n  analogWrite(MOTOR2_B, 0);\n}\n\nvoid moveForward() {\n  Serial.println(\"Forward\");\n  analogWrite(MOTOR1_B, 255);\n  analogWrite(MOTOR2_B, 255);\n  delay(200);\n  stopMotors();\n}\n\nvoid moveBackward() {\n  Serial.println(\"Backward\");\n  analogWrite(MOTOR1_A, 255);\n  analogWrite(MOTOR2_A, 255);\n  delay(200);\n  stopMotors();\n}\n\nvoid turnLeft() {\n  Serial.println(\"Left\");\n  analogWrite(MOTOR1_A, 255);\n  analogWrite(MOTOR2_B, 255);\n  delay(200);\n  stopMotors();\n}\n\nvoid turnRight() {\n  Serial.println(\"Right\");\n  analogWrite(MOTOR1_B, 255);\n  analogWrite(MOTOR2_A, 255);\n  delay(200);\n  stopMotors();\n}\n\nvoid handleIRControl() {\n  if (IrReceiver.decode()) {\n    unsigned long code = IrReceiver.decodedIRData.decodedRawData;\n    Serial.print(\"IR Code: \");\n    Serial.println(code, HEX);\n\n    switch (code) {\n      case Forward: moveForward(); break;\n      case Backward: moveBackward(); break;\n      case Left: turnLeft(); break;\n      case Right: turnRight(); break;\n      case Stop: stopMotors(); break;\n    }\n    irrecv.resume();\n  }\n}\n\nvoid loop() {\n  if (currentMode == IR_MODE) {\n    handleIRControl();\n  }\n}\n"
+}
+}
+}
+ 

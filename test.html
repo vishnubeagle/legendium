@@ -1,0 +1,47 @@
+.mode-card {
+  background-image: url("data:image/svg+xml,%3Csvg width='1042' height='517' viewBox='0 0 1042 517' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.45355 277.468L44.9479 318.035C50.0684 323.726 52.9015 331.112 52.9015 338.768V485.5C52.9015 502.621 66.8353 516.5 83.9562 516.5H1010.45C1027.57 516.5 1041.5 502.621 1041.5 485.5V164.192C1041.5 158.133 1039.72 152.207 1036.39 147.147L1003.08 96.5453C997.347 87.8346 987.617 82.5909 977.189 82.5909H700.032C689.949 82.5909 680.495 77.6869 674.689 69.4436L635.384 13.6474C629.577 5.40405 620.124 0.5 610.041 0.5H31.5C14.3792 0.5 0.5 14.3792 0.5 31.5V256.735C0.5 264.391 3.33311 271.776 8.45355 277.468Z' fill='%2304040E' fill-opacity='0.79' stroke='%23B1A9A9'/%3E%3C/svg%3E");
+  background-size: 100% 100%; /* NEW: Fit SVG exactly to card size (no cropping/stretch) */
+  background-position: center; /* Centers the SVG */
+  background-repeat: no-repeat; /* Prevents tiling */
+
+
+  border: none; /* REMOVED: No border - SVG defines edges */
+  border-radius: 0; /* REMOVED: No rounding - let SVG shape it */
+  padding: 30px 20px; /* REDUCED: Less padding to fit SVG's irregular shape */
+
+  max-width: 600px; /* Keep max width */
+  height: 320px; /* Keep height */
+  width: 90%;
+  text-align: center;
+  gap: 15px; /* REDUCED: Tighter gap for compact fit */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* NEW: Push content to top of SVG for better positioning */
+  
+  /* NEW: Overall size adjustment - Scale SVG/card if needed (e.g., 90% for smaller) */
+  transform: scale(1.5) translateY(50px); /* Combines size scale + downward shift; adjust scale(0.8) for smaller */
+  
+  /* NEW: Clip content to SVG shape (optional - prevents overflow outside SVG) */
+  clip-path: url(#svg-clip); /* Requires <defs> in HTML - see below */
+}
+
+/* NEW: Text Positioning Adjustments - Move "Select Mode" higher, subtitle closer */
+.mode-card .mode-header h2 {
+  margin: 0 0 5px 0; /* REDUCED: Less bottom margin for higher position */
+  padding-top: 35px; /* NEW: Top padding inside SVG top curve */
+  font-size: 2.8rem; /* Slightly smaller for fit */
+}
+
+.mode-card .mode-header p {
+  font-size: 0.9rem; /* REDUCED: Smaller subtitle */
+  margin: 0 0 15px 0; /* REDUCED: Less bottom margin, closer to buttons */
+  padding-bottom: 5px; /* NEW: Bottom padding to avoid SVG bottom curve */
+}
+
+.mode-card .mode-selection {
+  margin-top: -5px; /* Pulls buttons up 15px; increase to -20px for more upward shift */
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Keeps space between buttons */
+}

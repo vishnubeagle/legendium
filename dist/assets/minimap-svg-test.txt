@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- futuristic-minimap-frame-v3.svg
+     Advanced holographic circular minimap frame for dark sci-fi/fantasy game UI.
+     Transparent center, multi-layered glow rings, tech data segments, and circuitry detail.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 512 512"
+     width="512" height="512"
+     style="background:none"
+     preserveAspectRatio="xMidYMid meet">
+
+  <defs>
+    <!-- Transparent center mask -->
+    <mask id="hole">
+      <rect width="512" height="512" fill="white"/>
+      <circle cx="256" cy="256" r="140" fill="black"/>
+    </mask>
+
+    <!-- Cyan-Neon Gradient -->
+    <linearGradient id="gCyan" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00f0ff"/>
+      <stop offset="50%" stop-color="#00baff"/>
+      <stop offset="100%" stop-color="#006cff"/>
+    </linearGradient>
+
+    <!-- Purple Accent Gradient -->
+    <linearGradient id="gViolet" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ae4bff"/>
+      <stop offset="100%" stop-color="#5200ff"/>
+    </linearGradient>
+
+    <!-- Holographic glow -->
+    <filter id="fGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Soft Bloom for deeper glow -->
+    <filter id="bloom" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="12" result="b"/>
+      <feColorMatrix in="b" type="matrix"
+        values="0 0 0 0 0.2
+                0 0 0 0 1
+                0 0 0 0 0.8
+                0 0 0 1 0"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Base container -->
+  <g mask="url(#hole)">
+
+    <!-- Outer luminous halo -->
+    <circle cx="256" cy="256" r="235"
+      fill="none" stroke="url(#gCyan)" stroke-width="4"
+      filter="url(#bloom)" opacity="0.9"/>
+
+    <!-- Dual segmented data rings -->
+    <circle cx="256" cy="256" r="220"
+      fill="none" stroke="url(#gViolet)" stroke-width="2.5"
+      stroke-dasharray="25 8" opacity="0.8"
+      filter="url(#fGlow)"/>
+    <circle cx="256" cy="256" r="205"
+      fill="none" stroke="url(#gCyan)" stroke-width="1.5"
+      stroke-dasharray="12 6" opacity="0.7"
+      filter="url(#fGlow)"/>
+
+    <!-- Inner circuitry ring -->
+    <g stroke="#00faff" stroke-width="0.8" opacity="0.5" filter="url(#fGlow)">
+      <circle cx="256" cy="256" r="190" fill="none" stroke-dasharray="2 3"/>
+      <circle cx="256" cy="256" r="175" fill="none" stroke-dasharray="1 4"/>
+      <circle cx="256" cy="256" r="160" fill="none" stroke-dasharray="3 5"/>
+    </g>
+
+    <!-- Circuit-like arcs -->
+    <g stroke="#0ff" stroke-width="1.4" opacity="0.75" filter="url(#bloom)">
+      <path d="M256 36 A220 220 0 0 1 476 256" fill="none"/>
+      <path d="M256 36 A200 200 0 0 1 456 256" fill="none" stroke="url(#gViolet)" opacity="0.5"/>
+      <path d="M36 256 A220 220 0 0 0 256 476" fill="none"/>
+      <path d="M56 256 A200 200 0 0 0 256 456" fill="none" stroke="url(#gViolet)" opacity="0.5"/>
+    </g>
+
+    <!-- Floating data nodes -->
+    <g fill="#00ffff" filter="url(#fGlow)" opacity="0.95">
+      <circle cx="256" cy="26" r="3"/>
+      <circle cx="486" cy="256" r="3"/>
+      <circle cx="256" cy="486" r="3"/>
+      <circle cx="26" cy="256" r="3"/>
+      <circle cx="396" cy="116" r="2.5"/>
+      <circle cx="116" cy="396" r="2.5"/>
+    </g>
+
+    <!-- Data vector markings -->
+    <g stroke="#00eaff" stroke-width="1" opacity="0.6">
+      <line x1="256" y1="80" x2="256" y2="120"/>
+      <line x1="392" y1="256" x2="352" y2="256"/>
+      <line x1="256" y1="392" x2="256" y2="352"/>
+      <line x1="120" y1="256" x2="160" y2="256"/>
+    </g>
+
+    <!-- Fine grid overlays -->
+    <g stroke="#ffffff" stroke-width="0.3" opacity="0.15">
+      <circle cx="256" cy="256" r="130" fill="none"/>
+      <circle cx="256" cy="256" r="110" fill="none"/>
+    </g>
+
+    <!-- Subtle inner ring glow -->
+    <circle cx="256" cy="256" r="145"
+      fill="none" stroke="url(#gCyan)" stroke-width="1.2"
+      opacity="0.65" filter="url(#fGlow)"/>
+
+    <!-- Faint rotating tick marks -->
+    <g stroke="#b54bff" stroke-width="1.3" opacity="0.8" filter="url(#fGlow)">
+      <g transform="translate(256,256)">
+        <!-- 24 tick marks -->
+        <g>
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+          <line x1="0" y1="230" x2="0" y2="222"/>
+        </g>
+        <g transform="rotate(15)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(30)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(45)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(60)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(75)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(90)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(105)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(120)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(135)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(150)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+        <g transform="rotate(165)">
+          <line x1="0" y1="-230" x2="0" y2="-222"/>
+        </g>
+      </g>
+    </g>
+
+  </g>
+</svg>

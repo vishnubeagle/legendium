@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VR Experience</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Libertinus+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  <link id="style-link" rel="stylesheet" href="./style.css">
+  <style>
+    body, html {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+    }
+    #scene { width: 100%; height: 100%; display: block; position: relative; }
+    .selection-screen { display: none; align-items: center; justify-content: center; height: 100%; position: fixed; inset: 0; z-index: 9999; pointer-events: auto; }
+    .scene-select-wrap { max-width: 1100px; width: 100%; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .scene-select-header { text-align: center; }
+    .scene-select-header h2 { margin: 0 0 6px 0; font-weight: 500; letter-spacing: 1px; }
+    .scene-select-header p { margin: 0; opacity: 0.8; font-size: 14px; }
+    .scenes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; width: 100%; }
+    .scene-card { position: relative; padding: 18px; border-radius: 12px; background: rgba(255,255,255,0.04); color: #fff; border: 1px solid rgba(255,255,255,0.08); cursor: default; user-select: none; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+    .scene-card.unlocked { cursor: pointer; }
+    .scene-card.unlocked:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(147,51,234,.2); border-color: rgba(147,51,234,.35); }
+    .scene-card.locked { opacity: 0.5; }
+    .scene-badge { font-size: 12px; padding: 3px 8px; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); }
+    .scene-title { font-weight: 500; letter-spacing: .5px; }
+    .lock-icon { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; opacity: 0.8; }
+    .scene-card.selected { outline: 2px solid #7c3aed; box-shadow: 0 0 0 4px rgba(124,58,237,0.2); }
+    .scene-select-actions { display: flex; gap: 10px; justify-content: center; margin-top: 6px; }
+    .btn { padding: 10px 16px; border-radius: 999px; border: 0; cursor: pointer; letter-spacing: .8px; text-transform: uppercase; font-weight: 600; }
+    .btn-primary { background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%); color: #fff; }
+    .btn-secondary { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .helper { font-size: 12px; opacity: .8; margin-top: 4px; }
+    #requirements-error { 
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      height: 100%; 
+      width: 100%; 
+      position: fixed; 
+      inset: 0; 
+      background: #1a1a1a; 
+      color: #fff; 
+      text-align: center; 
+      padding: 20px; 
+      z-index: 10000; 
+      flex-direction: column;
+    }
+    #requirements-error h1 { font-size: 24px; margin-bottom: 10px; }
+    #requirements-error p { font-size: 16px; max-width: 600px; margin-bottom: 20px; }
+    #requirements-error button { padding: 10px 20px; background: #9333ea; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    #requirements-error .debug-info { font-size: 12px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-top: 20px; }
+    body.checks-failed > *:not(#requirements-error) { display: none !important; }
+    body.checks-failed #requirements-error { display: flex !important; }
+    #pause-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      flex-direction: column;
+      pointer-events: auto;
+    }
+    #pause-overlay h2 { font-size: 24px; margin-bottom: 10px; }
+    #pause-overlay p { font-size: 16px; opacity: 0.8; }
+    body.paused #scene { pointer-events: none; }
+    body.paused #pause-overlay { display: flex; }
+  </style>
+</head>
+<body>
+  <div id="requirements-error">
+    <div>
+      <h1>System Requirements Not Met</h1>
+      <p id="error-message">Your device does not meet the minimum requirements to run this experience. Please use a device with at least a 4GB dedicated GPU, 8GB RAM, and a modern CPU (e.g., Intel i5-10th Gen or better).</p>
+      <div id="debug-info" class="debug-info"></div>
+      <button onclick="location.reload()">Retry Check</button>
+    </div>
+  </div>
+
+  <div id="pause-overlay">
+    <h2>Experience Paused</h2>
+    <p>Please plug in your laptop to resume the experience.</p>
+  </div>
+
+  <script type="module">
+    // Global flags
+    window.hardwarePassed = false;
+    let isPaused = false;
+
+    // Browser detection
+    function isEdge() {
+      return /Edg\//.test(navigator.userAgent);
+    }
+
+    async function isBrave() {
+      if (navigator.brave) {
+        return await navigator.brave.isBrave();
+      }
+      return false;
+    }
+
+    function isChrome() {
+      return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    }
+
+    function isFirefox() {
+      return /Firefox/.test(navigator.userAgent);
+    }
+
+    // Hardware check functions
+    function checkWebGLSupport() {
+      console.log('Checking WebGL support...');
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        if (!gl) {
+          console.log('WebGL check failed: No WebGL support');
+          return { supported: false, message: 'WebGL is not supported. This experience requires a compatible GPU.' };
+        }
+        console.log('WebGL check passed');
+        return { supported: true };
+      } catch (e) {
+        console.error('WebGL check error:', e);
+        return { supported: false, message: 'Error checking WebGL support.' };
+      }
+    }
+
+    function checkGPU() {
+      console.log('Checking GPU...');
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        if (!gl) {
+          console.log('GPU check failed: No GL context');
+          return { supported: false, message: 'No GPU detected.' };
+        }
+        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'unknown';
+        console.log('Detected GPU Renderer:', renderer);
+
+        const lowEndGPUs = [
+          // 'Intel(R) HD Graphics',
+          // 'Intel(R) UHD Graphics',
+          // 'Intel(R) Iris Xe Graphics',
+          // 'Intel(R) Iris Plus Graphics',
+          // 'AMD Radeon(TM) Graphics',
+          // 'AMD Radeon (TM) R4 Graphics',
+          // 'Mali-G',
+          // 'Adreno',
+          'Apple GPU',
+          // 'Software Renderer',
+          // 'llvmpipe'
+        ];
+        if (lowEndGPUs.some(gpu => renderer.toLowerCase().includes(gpu.toLowerCase()))) {
+          console.log('GPU check failed: Low-end GPU detected');
+          return { supported: false, message: 'Your GPU is not powerful enough (requires a 4GB dedicated GPU or better, e.g., NVIDIA GeForce RTX 3050 or equivalent).' };
+        }
+        console.log('GPU check passed');
+        return { supported: true, renderer };
+      } catch (e) {
+        console.error('GPU check error:', e);
+        return { supported: false, message: 'Error checking GPU.' };
+      }
+    }
+
+    function checkRAM() {
+      console.log('Checking RAM...');
+      try {
+        const deviceMemory = navigator.deviceMemory || 0;
+        console.log('Detected Device Memory:', deviceMemory, 'GB');
+        if (deviceMemory > 0 && deviceMemory < 2) {
+          console.log('RAM check failed: Insufficient memory');
+          return { supported: false, message: 'Your device has insufficient memory (requires at least 8GB RAM).' };
+        }
+        console.log('RAM check passed or API unavailable');
+        return { supported: true, deviceMemory };
+      } catch (e) {
+        console.error('RAM check error:', e);
+        return { supported: true }; 
+      }
+    }
+
+    function checkCPU() {
+      console.log('Running CPU benchmark...');
+      try {
+        const start = performance.now();
+        let sum = 0;
+        for (let i = 0; i < 1000000; i++) {
+          sum += Math.sin(i) * Math.cos(i) + Math.sqrt(i % 1000);
+        }
+        const end = performance.now();
+        const timeMs = end - start;
+        console.log('CPU Benchmark Time (ms):', timeMs);
+
+        // Threshold: i5-12450H should take ~30-60ms; block if >60ms
+        if (timeMs > 60) {
+          console.log('CPU check failed: Too slow');
+          return { supported: false, message: 'Your CPU is too weak or throttling is enabled (requires Intel i5-10th Gen or better, benchmark time >60ms). Disable DevTools throttling and try again.' };
+        }
+        console.log('CPU check passed');
+        return { supported: true, timeMs };
+      } catch (e) {
+        console.error('CPU check error:', e);
+        return { supported: false, message: 'Error running CPU benchmark.' };
+      }
+    }
+
+    async function checkBrowser() {
+      console.log('Checking browser...');
+      if (isEdge()) {
+        console.log('Browser check failed: Microsoft Edge detected');
+        return { supported: false, message: 'This experience is not supported on Microsoft Edge. Please use Chrome or Firefox.' };
+      }
+      if (await isBrave()) {
+        console.log('Browser check failed: Brave browser detected');
+        return { supported: false, message: 'This experience is not supported on Brave browser. Please use Chrome or Firefox.' };
+      }
+      console.log('Browser check passed');
+      return { supported: true };
+    }
+
+    async function checkSystemRequirements() {
+      console.log('Starting system requirements check...');
+      const results = [];
+      results.push(await checkBrowser());
+      results.push(checkWebGLSupport());
+      results.push(checkGPU());
+      results.push(checkRAM());
+      results.push(checkCPU());
+
+      console.log('Check results:', results);
+
+      let failed = results.find(result => !result.supported);
+      if (failed) {
+        console.log('System requirements failed:', failed.message);
+        document.body.classList.add('checks-failed');
+        const errorDiv = document.getElementById('requirements-error');
+        errorDiv.style.display = 'flex';
+        document.getElementById('error-message').textContent = failed.message;
+        // Show debug info
+        const debugDiv = document.getElementById('debug-info');
+        debugDiv.innerHTML = `
+          <strong>Debug Info:</strong><br>
+          Browser: ${navigator.userAgent}<br>
+          GPU: ${results.find(r => r.renderer)?.renderer || 'Unknown'}<br>
+          RAM: ${results.find(r => r.deviceMemory)?.deviceMemory || 'Unknown'} GB<br>
+          CPU Benchmark Time: ${results.find(r => r.timeMs)?.timeMs || 'N/A'} ms
+        `;
+        return false;
+      }
+      console.log('All system requirements passed!');
+      window.hardwarePassed = true;
+      return true;
+    }
+
+
+    function setupBatteryMonitoring() {
+      const pauseOverlay = document.getElementById('pause-overlay');
+      const canvas = document.getElementById('scene');
+
+      const blockKeyboard = (event) => {
+        if (isPaused) {
+          event.preventDefault();
+          event.stopPropagation();
+          console.log('Keyboard event blocked:', event.key);
+        }
+      };
+
+
+      function pauseExperience() {
+        if (isPaused) return;
+        isPaused = true;
+        document.body.classList.add('paused');
+        pauseOverlay.style.display = 'flex';
+        canvas.style.pointerEvents = 'none';
+   
+        document.addEventListener('keydown', blockKeyboard, { capture: true });
+        console.log('Experience paused: Laptop unplugged');
+
+      }
+
+      function resumeExperience() {
+        if (!isPaused) return;
+        isPaused = false;
+        document.body.classList.remove('paused');
+        pauseOverlay.style.display = 'none';
+        canvas.style.pointerEvents = 'auto';
+
+        document.removeEventListener('keydown', blockKeyboard, { capture: true });
+        console.log('Experience resumed: Laptop plugged in');
+
+      }
+
+
+      if ('getBattery' in navigator) {
+        navigator.getBattery().then(battery => {
+
+          if (!battery.charging) {
+            pauseExperience();
+          }
+
+          // Listen for charging changes
+          battery.addEventListener('chargingchange', () => {
+            if (!battery.charging) {
+              pauseExperience();
+            } else {
+              resumeExperience();
+            }
+          });
+        }).catch(e => {
+          console.error('Battery API error:', e);
+    
+        });
+      } else {
+        console.log('Battery API not supported; skipping battery check');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!await checkSystemRequirements()) {
+        return; 
+      }
+
+      setupBatteryMonitoring();
+
+   
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js').then(({ initializeApp }) => {
+        import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').then(({ getAuth, onAuthStateChanged }) => {
+          const firebaseConfig = {
+            apiKey: "AIzaSyD-ldTZ0guWYwolDXmry4cWGWSVIUrtNOo",
+            authDomain: "legendium-2fbb6.firebaseapp.com",
+            projectId: "legendium-2fbb6",
+            storageBucket: "legendium-2fbb6.firebasestorage.app",
+            messagingSenderId: "1080832705555",
+            appId: "1:1080832705555:web:2cdc521dfd5821efe8ebe6",
+            measurementId: "G-JTE4VCMGYS"
+          };
+
+          const app = initializeApp(firebaseConfig);
+          const auth = getAuth(app);
+
+          onAuthStateChanged(auth, (user) => {
+            if (!user) {
+              window.location.replace('./index.html');
+              return;
+            }
+            if (!sessionStorage.getItem('sceneSelected')) {
+              window.location.replace('./scene-select.html');
+              return;
+            }
+            import('./data.js').then(({ setStartScene }) => {
+              const selectedScene = localStorage.getItem('loadScene');
+              if (selectedScene) {
+                setStartScene(selectedScene);
+              }
+            });
+          });
+        });
+      });
+
+      // Initialize character selection and sounds only if checks pass
+      import('./characterSelection.js').then(({ startCharacterSelection }) => {
+        startCharacterSelection();
+        const hoverSound = new Audio('/sounds/mouse-hover.mp3');
+        const clickSound = new Audio('/sounds/mouse-click.mp3');
+        const playHover = () => { 
+          if (!isPaused) { hoverSound.currentTime = 0; hoverSound.play().catch(() => {}); }
+        };
+        const playClick = () => { 
+          if (!isPaused) { clickSound.currentTime = 0; clickSound.play().catch(() => {}); }
+        };
+
+        document.querySelectorAll('.scene-card').forEach(card => {
+          card.addEventListener('mouseenter', playHover);
+          card.addEventListener('click', playClick);
+        });
+
+        document.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('mouseenter', playHover);
+          btn.addEventListener('click', playClick);
+        });
+
+        document.querySelectorAll('.character-card').forEach(card => {
+          card.addEventListener('mouseenter', playHover);
+          card.addEventListener('click', playClick);
+        });
+      });
+    });
+  </script>
+
+  <!-- Scene Selection Screen -->
+  <div id="scene-selection" class="selection-screen" style="display: none;">
+    <div class="scene-select-wrap">
+      <div class="scene-select-header">
+        <h2>Select Scene</h2>
+        <p>Only explored scenes are unlocked. Locked scenes will become available after you explore them.</p>
+      </div>
+      <div id="scenes-grid" class="scenes-grid">
+        <div class="scene-card locked" data-scene="scene1"><div class="scene-badge">Scene 1</div><div class="scene-title">Mystical Forest</div><div class="lock-icon">🔒</div></div>
+        <div class="scene-card locked" data-scene="scene2"><div class="scene-badge">Scene 2</div><div class="scene-title">Futuristic City</div><div class="lock-icon">🔒</div></div>
+        <div class="scene-card locked" data-scene="scene3"><div class="scene-badge">Scene 3</div><div class="scene-title">Robotics University</div><div class="lock-icon">🔒</div></div>
+        <div class="scene-card locked" data-scene="scene4"><div class="scene-badge">Scene 4</div><div class="scene-title">Underground Lab</div><div class="lock-icon">🔒</div></div>
+        <div class="scene-card locked" data-scene="scene5"><div class="scene-badge">Scene 5</div><div class="scene-title">Robotic Assembly</div><div class="lock-icon">🔒</div></div>
+      </div>
+      <div class="scene-select-actions">
+        <button id="proceed-scene-btn" class="btn btn-primary" disabled>Continue</button>
+        <button id="skip-to-default-btn" class="btn btn-secondary" style="display:none;">Start at Scene 1</button>
+      </div>
+      <div id="scene-helper" class="helper"></div>
+    </div>
+  </div>
+
+  <!-- Mode Selection Screen -->
+  <div id="mode-selection" class="selection-screen" style="display: none;">
+    <div class="mode-header">
+      <h2>Select Experience Mode</h2>
+      <p>Choose your preferred interaction method</p>
+    </div>
+    <div class="mode-selection">
+      <button id="vr-mode-button" class="mode-button"><span class="button-text">VR</span></button>
+      <button id="non-vr-mode-button" class="mode-button"><span class="button-text">Non VR</span></button>
+    </div>
+  </div>
+
+  <!-- Character Selection Screen -->
+  <div id="character-selection" class="selection-screen" style="display: none;">
+    <div class="character-container">
+      <div class="character-cards-section">
+        <div class="character-card" data-character="characters/emily_v14 3.glb">
+          <div class="card-image" style="background-image: url('./emily1.jpg');"></div>
+          <div class="card-overlay"><div class="character-info"><h3>EMILY</h3><span>EXPLORER</span></div></div>
+        </div>
+        <div class="character-card" data-character="characters/gopuv5-opt.glb">
+          <div class="card-image" style="background-image: url('./john.jpg');"></div>
+          <div class="card-overlay"><div class="character-info"><h3>JOHN</h3><span>TECHNICIAN</span></div></div>
+        </div>
+      </div>
+      <div class="start-section">
+        <button id="start-experience-btn" class="start-button"><span class="button-text">START EXPERIENCE</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" style="display: none;">
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <div id="loading-text">Initializing Experience</div>
+    <div id="loading-container">
+      <div class="circle-outer"></div>
+      <div class="circle-middle"></div>
+      <div class="circle-inner"></div>
+      <div class="loading-progress">0%</div>
+    </div>
+  </div>
+
+  <div id="container"></div>
+  <canvas id="scene" class="webgl" style="display: none;"></canvas>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</body>
+</html>

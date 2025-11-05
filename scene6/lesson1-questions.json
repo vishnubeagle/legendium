@@ -1,0 +1,247 @@
+{
+  "lessonId": "lesson1",
+  "title": "Arduino Basics - Quiz",
+  "description": "Test your knowledge about Arduino basics such as #define, setup, loop, pinMode, and functions",
+  "questions": [
+    {
+      "id": "l1q1",
+      "question": "What does #define do in an Arduino program?",
+      "options": [
+        "Runs once at startup",
+        "Pauses the program",
+        "Replaces a word with a constant value",
+        "Reads sensor data"
+      ],
+      "answerIndex": 2,
+      "explanation": "#define replaces a word with a constant value before the program is compiled."
+    },
+    {
+      "id": "l1q2",
+      "question": "Why is using #define useful?",
+      "options": [
+        "It makes code easier to read and maintain",
+        "It slows down the program",
+        "It creates infinite loops",
+        "It changes how setup() runs"
+      ],
+      "answerIndex": 0,
+      "explanation": "Using #define avoids magic numbers and makes code clearer and easier to maintain."
+    },
+    {
+      "id": "l1q3",
+      "question": "When does setup() run in an Arduino program?",
+      "options": [
+        "Only once at the start",
+        "Forever in a loop",
+        "When a button is pressed",
+        "Every second"
+      ],
+      "answerIndex": 0,
+      "explanation": "setup() runs only once at the beginning of the program."
+    },
+    {
+      "id": "l1q4",
+      "question": "Which of the following is usually placed inside setup()?",
+      "options": [
+        "pinMode() declarations",
+        "The infinite loop",
+        "Main logic",
+        "Serial.print() in a loop"
+      ],
+      "answerIndex": 0,
+      "explanation": "pinMode() and other initialization tasks are typically placed in setup()."
+    },
+    {
+      "id": "l1q5",
+      "question": "What makes loop() special in Arduino?",
+      "options": [
+        "Runs only once",
+        "Runs forever, repeating",
+        "Reads pin numbers",
+        "Defines constants"
+      ],
+      "answerIndex": 1,
+      "explanation": "loop() repeats continuously after setup() finishes."
+    },
+    {
+      "id": "l1q6",
+      "question": "What happens when Arduino reaches the end of loop()?",
+      "options": [
+        "It stops running",
+        "It restarts loop() from the top",
+        "It reruns setup()",
+        "It powers off"
+      ],
+      "answerIndex": 1,
+      "explanation": "After finishing loop(), Arduino automatically starts loop() again from the top."
+    },
+    {
+      "id": "l1q7",
+      "question": "What does pinMode(RGB_RED, OUTPUT); mean?",
+      "options": [
+        "Pin sends signals",
+        "Pin reads signals",
+        "Pin is unused",
+        "Pin delays"
+      ],
+      "answerIndex": 0,
+      "explanation": "OUTPUT mode means the pin sends signals, like powering an LED."
+    },
+    {
+      "id": "l1q8",
+      "question": "Which mode should be used in pinMode() to read a button?",
+      "options": [
+        "OUTPUT",
+        "INPUT",
+        "DELAY",
+        "LOOP"
+      ],
+      "answerIndex": 1,
+      "explanation": "Buttons and sensors require INPUT mode to read their values."
+    },
+    {
+      "id": "l1q9",
+      "question": "Why do we create the function setRGBColor()?",
+      "options": [
+        "To group three analogWrite() calls",
+        "To create delays",
+        "To replace pinMode()",
+        "To run setup() again"
+      ],
+      "answerIndex": 0,
+      "explanation": "setRGBColor() simplifies code by grouping three analogWrite() calls into one reusable function."
+    },
+    {
+      "id": "l1q10",
+      "question": "What values does setRGBColor(red, green, blue) accept?",
+      "options": [
+        "0–1",
+        "0–255",
+        "0–1023",
+        "True/False"
+      ],
+      "answerIndex": 1,
+      "explanation": "Each color channel accepts a value from 0–255, controlling brightness."
+    },
+    {
+      "id": "l1q11",
+      "question": "What is the range of values accepted by analogWrite()?",
+      "options": [
+        "0–1023",
+        "0–255",
+        "0–1",
+        "1–100"
+      ],
+      "answerIndex": 1,
+      "explanation": "analogWrite() accepts values from 0 to 255."
+    },
+    {
+      "id": "l1q12",
+      "question": "What does analogWrite(RGB_GREEN, 0); do?",
+      "options": [
+        "Turns the green LED fully off",
+        "Turns the green LED fully on",
+        "Sets green LED to half brightness",
+        "Makes the LED blink"
+      ],
+      "answerIndex": 0,
+      "explanation": "A value of 0 means the LED is completely off."
+    },
+    {
+      "id": "l1q13",
+      "question": "What does analogWrite(RGB_RED, 255); do?",
+      "options": [
+        "Turns the red LED off",
+        "Turns the red LED to full brightness",
+        "Turns the red LED to half brightness",
+        "Makes the LED flicker"
+      ],
+      "answerIndex": 1,
+      "explanation": "A value of 255 means the LED is at maximum brightness."
+    },
+    {
+      "id": "l1q14",
+      "question": "What does analogRead(A0) return?",
+      "options": [
+        "0–255",
+        "0–1023",
+        "True/False",
+        "Always 5V"
+      ],
+      "answerIndex": 1,
+      "explanation": "analogRead() returns a value between 0 and 1023."
+    },
+    {
+      "id": "l1q15",
+      "question": "If analogRead(A0) returns 1023, what does it mean?",
+      "options": [
+        "Pin is at 0V",
+        "Pin is at maximum voltage (~5V)",
+        "Pin is floating",
+        "Pin is disconnected"
+      ],
+      "answerIndex": 1,
+      "explanation": "1023 means the pin is reading maximum voltage, usually 5V."
+    },
+    {
+      "id": "l1q16",
+      "question": "Which function pauses the program?",
+      "options": [
+        "loop()",
+        "delay()",
+        "analogRead()",
+        "pinMode()"
+      ],
+      "answerIndex": 1,
+      "explanation": "delay() pauses the program for a given time in milliseconds."
+    },
+    {
+      "id": "l1q17",
+      "question": "What does delay(1000); do?",
+      "options": [
+        "Pauses for 1 ms",
+        "Pauses for 1 second",
+        "Pauses for 10 seconds",
+        "Turns LED off"
+      ],
+      "answerIndex": 1,
+      "explanation": "delay(1000); pauses for 1000 milliseconds, which is 1 second."
+    },
+    {
+      "id": "l1q18",
+      "question": "If you want to pause for 5 seconds, what delay value should you use?",
+      "options": [
+        "5",
+        "50",
+        "500",
+        "5000"
+      ],
+      "answerIndex": 3,
+      "explanation": "5 seconds equals 5000 milliseconds, so delay(5000); is used."
+    },
+    {
+      "id": "l1q19",
+      "question": "Why might using too many delay() calls be a problem?",
+      "options": [
+        "It makes LEDs brighter",
+        "It blocks the Arduino from doing other tasks",
+        "It increases speed",
+        "It improves sensor readings"
+      ],
+      "answerIndex": 1,
+      "explanation": "delay() stops everything else, so too many delays can block other tasks."
+    },
+    {
+      "id": "l1q20",
+      "question": "Which function is used to declare whether a pin is input or output?",
+      "options": [
+        "pinMode()",
+        "analogWrite()",
+        "delay()",
+        "setup()"
+      ],
+      "answerIndex": 0,
+      "explanation": "pinMode() sets a pin as INPUT or OUTPUT before use."
+    }
+  ]
+}

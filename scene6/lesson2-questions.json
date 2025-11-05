@@ -1,0 +1,127 @@
+{
+  "lessonId": "lesson2",
+  "title": "Arduino Sound & Timing - Quiz",
+  "description": "Test your knowledge of tone(), noTone(), millis(), for loop, and volatile in Arduino programming.",
+  "questions": [
+    {
+      "id": "l2q1",
+      "question": "What does the tone() function do in Arduino?",
+      "options": [
+        "Generates a square wave on a pin to produce sound",
+        "Measures sound frequency from a microphone",
+        "Stops sound output from a buzzer",
+        "Plays MP3 audio files"
+      ],
+      "answerIndex": 0,
+      "explanation": "tone() generates a square wave signal on a specified pin to drive a buzzer or speaker."
+    },
+    {
+      "id": "l2q2",
+      "question": "Which function is used to stop a sound started by tone()?",
+      "options": [
+        "stopTone()",
+        "mute()",
+        "noTone()",
+        "silence()"
+      ],
+      "answerIndex": 2,
+      "explanation": "noTone() stops any sound currently being played on a pin by tone()."
+    },
+    {
+      "id": "l2q3",
+      "question": "What does millis() return?",
+      "options": [
+        "Time in seconds since the last delay() call",
+        "CPU temperature",
+        "Milliseconds since the board was powered on",
+        "Remaining time before shutdown"
+      ],
+      "answerIndex": 2,
+      "explanation": "millis() returns the number of milliseconds since the Arduino started running."
+    },
+    {
+      "id": "l2q4",
+      "question": "Why is millis() preferred over delay() in some cases?",
+      "options": [
+        "It makes the code run slower",
+        "It allows multitasking without stopping the program",
+        "It uses less memory",
+        "It only works with tone()"
+      ],
+      "answerIndex": 1,
+      "explanation": "Unlike delay(), millis() allows you to keep the program running while tracking time."
+    },
+    {
+      "id": "l2q5",
+      "question": "Which of the following is the correct structure of a for loop?",
+      "options": [
+        "for(condition; increment; initialization)",
+        "for(initialization; condition; increment)",
+        "for(increment; initialization; condition)",
+        "for(condition; initialization; increment)"
+      ],
+      "answerIndex": 1,
+      "explanation": "A for loop follows the structure: for(initialization; condition; increment)."
+    },
+    {
+      "id": "l2q6",
+      "question": "What is the purpose of the volatile keyword?",
+      "options": [
+        "To increase execution speed",
+        "To prevent variables from changing",
+        "To tell the compiler that a variable may change unexpectedly",
+        "To store data permanently"
+      ],
+      "answerIndex": 2,
+      "explanation": "volatile tells the compiler not to optimize a variable because it may change unpredictably (e.g., in an interrupt)."
+    },
+    {
+      "id": "l2q7",
+      "question": "What happens if you forget to use volatile on a variable used inside an interrupt?",
+      "options": [
+        "The program will stop compiling",
+        "The variable may not update correctly, causing bugs",
+        "The system will restart automatically",
+        "Nothing will change"
+      ],
+      "answerIndex": 1,
+      "explanation": "Without volatile, the compiler may optimize the variable and ignore changes made inside an interrupt."
+    },
+    {
+      "id": "l2q8",
+      "question": "Which of the following correctly plays a sound at 500Hz for 1 second?",
+      "options": [
+        "tone(4, 500);",
+        "tone(4, 500, 1000);",
+        "playTone(500, 1000);",
+        "beep(500, 1);"
+      ],
+      "answerIndex": 1,
+      "explanation": "tone(pin, frequency, duration) is the correct format."
+    },
+    {
+      "id": "l2q9",
+      "question": "In the provided tryThisCode, what does playMelody() do?",
+      "options": [
+        "Detects sound frequency",
+        "Loops through multiple tones and plays them one by one",
+        "Records audio",
+        "Plays a single tone forever"
+      ],
+      "answerIndex": 1,
+      "explanation": "playMelody() runs a for loop to iterate through an array of frequencies and plays them in sequence."
+    },
+    {
+      "id": "l2q10",
+      "question": "What is the role of noTone(BUZZER_PIN) inside playMelody()?",
+      "options": [
+        "To pause between notes",
+        "To increase volume",
+        "To restart the loop",
+        "To reduce power consumption"
+      ],
+      "answerIndex": 0,
+      "explanation": "noTone() briefly stops sound to act as a delay between musical notes."
+    }
+  ]
+}

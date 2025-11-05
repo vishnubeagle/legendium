@@ -1,0 +1,127 @@
+{
+  "lessonId": "lesson5",
+  "title": "Interrupts, IR Remote & Motor Control - Quiz",
+  "description": "Test your knowledge of enums, interrupts, IRremote, and motor control in Arduino.",
+  "questions": [
+    {
+      "id": "l5q1",
+      "question": "What is an enum used for in Arduino?",
+      "options": [
+        "To declare floating-point constants",
+        "To define a set of named constant values",
+        "To store a list of strings",
+        "To create a hardware interrupt"
+      ],
+      "answerIndex": 1,
+      "explanation": "enum lets you create a list of named constants like IR_MODE or MUSIC_MODE."
+    },
+    {
+      "id": "l5q2",
+      "question": "What does the volatile keyword indicate?",
+      "options": [
+        "The variable value never changes",
+        "The variable may change unexpectedly, such as inside an interrupt",
+        "The variable stores floating point data",
+        "The variable is stored in EEPROM"
+      ],
+      "answerIndex": 1,
+      "explanation": "volatile prevents the compiler from optimizing out variables that change in interrupts."
+    },
+    {
+      "id": "l5q3",
+      "question": "Which function attaches an interrupt to a specific pin?",
+      "options": [
+        "pinMode()",
+        "attachInterrupt()",
+        "enableInterrupt()",
+        "startInterrupt()"
+      ],
+      "answerIndex": 1,
+      "explanation": "attachInterrupt() runs a function automatically when a pin changes state."
+    },
+    {
+      "id": "l5q4",
+      "question": "What is debouncing in Arduino?",
+      "options": [
+        "A method to speed up button response",
+        "A technique to filter electrical noise from analog sensors",
+        "A method to ignore multiple false button presses caused by mechanical bounce",
+        "A way to smooth PWM signals"
+      ],
+      "answerIndex": 2,
+      "explanation": "Debouncing prevents detecting multiple presses from one physical button press."
+    },
+    {
+      "id": "l5q5",
+      "question": "Which function from the IRremote library checks if a signal has been received?",
+      "options": [
+        "IrReceiver.decode()",
+        "IrReceiver.resume()",
+        "IrReceiver.read()",
+        "IrReceiver.listen()"
+      ],
+      "answerIndex": 0,
+      "explanation": "IrReceiver.decode() returns true when a new IR signal is detected."
+    },
+    {
+      "id": "l5q6",
+      "question": "Why is motor acceleration implemented gradually using a for-loop?",
+      "options": [
+        "To make motors reverse faster",
+        "To prevent sudden jerks and reduce motor stress",
+        "To reduce PWM resolution",
+        "To save power"
+      ],
+      "answerIndex": 1,
+      "explanation": "Gradually increasing PWM prevents sudden motor strain and smoother motion."
+    },
+    {
+      "id": "l5q7",
+      "question": "Which pair of functions is used to generate and stop sound?",
+      "options": [
+        "soundOn() and soundOff()",
+        "tone() and noTone()",
+        "beep() and stopBeep()",
+        "buzzerOn() and buzzerOff()"
+      ],
+      "answerIndex": 1,
+      "explanation": "tone() plays a sound at a given frequency, noTone() stops it."
+    },
+    {
+      "id": "l5q8",
+      "question": "What parameter in attachInterrupt() specifies which pin to monitor?",
+      "options": [
+        "The digital pin number directly",
+        "digitalPinToInterrupt(pin)",
+        "The analog pin name",
+        "The PWM channel"
+      ],
+      "answerIndex": 1,
+      "explanation": "digitalPinToInterrupt(pin) converts a pin number into its interrupt number."
+    },
+    {
+      "id": "l5q9",
+      "question": "What happens inside switch–case when the Forward IR code is received?",
+      "options": [
+        "The motors stop",
+        "The moveForward() function runs",
+        "The mode switches to MUSIC_MODE",
+        "The IR receiver resets"
+      ],
+      "answerIndex": 1,
+      "explanation": "When the Forward code is detected, switch–case calls moveForward()."
+    },
+    {
+      "id": "l5q10",
+      "question": "Why is lastInterruptTime used with DEBOUNCE_DELAY in toggleMode()?",
+      "options": [
+        "To time how long the motor runs",
+        "To avoid reading the IR signal twice",
+        "To ensure enough time passes between button presses",
+        "To measure PWM frequency"
+      ],
+      "answerIndex": 2,
+      "explanation": "It checks that the time since the last interrupt exceeds the debounce delay, preventing repeated triggers."
+    }
+  ]
+}

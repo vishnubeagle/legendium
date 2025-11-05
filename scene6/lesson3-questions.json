@@ -1,0 +1,127 @@
+{
+  "lessonId": "lesson3",
+  "title": "Arduino Serial Communication & Motor Control - Quiz",
+  "description": "Test your knowledge of Serial communication and PWM motor control in Arduino.",
+  "questions": [
+    {
+      "id": "l3q1",
+      "question": "What does Serial.begin(9600) do?",
+      "options": [
+        "Starts the motor at speed 9600",
+        "Starts serial communication at 9600 baud",
+        "Sends data to the LCD screen",
+        "Sets PWM frequency to 9600 Hz"
+      ],
+      "answerIndex": 1,
+      "explanation": "Serial.begin(9600) starts communication with your computer at 9600 bits per second."
+    },
+    {
+      "id": "l3q2",
+      "question": "Which of the following prints a message to the Serial Monitor with a new line?",
+      "options": [
+        "Serial.write()",
+        "Serial.print()",
+        "Serial.println()",
+        "Serial.begin()"
+      ],
+      "answerIndex": 2,
+      "explanation": "Serial.println() prints text followed by a newline character."
+    },
+    {
+      "id": "l3q3",
+      "question": "What is the common baud rate used for beginner Arduino projects?",
+      "options": [
+        "4800",
+        "9600",
+        "19200",
+        "115200"
+      ],
+      "answerIndex": 1,
+      "explanation": "9600 baud is the most common beginner-friendly speed for Arduino serial communication."
+    },
+    {
+      "id": "l3q4",
+      "question": "What does PWM stand for?",
+      "options": [
+        "Pulse Width Modulation",
+        "Power Watt Management",
+        "Pin Wiring Mode",
+        "Programmable Wave Method"
+      ],
+      "answerIndex": 0,
+      "explanation": "PWM stands for Pulse Width Modulation, used to control motor speed and LED brightness."
+    },
+    {
+      "id": "l3q5",
+      "question": "What happens if both motor pins are set to 0 with analogWrite()?",
+      "options": [
+        "The motor spins forward",
+        "The motor spins backward",
+        "The motor stops",
+        "The motor overheats"
+      ],
+      "answerIndex": 2,
+      "explanation": "Giving both motor pins 0 stops the motor."
+    },
+    {
+      "id": "l3q6",
+      "question": "How do you make a DC motor spin backward using two motor pins?",
+      "options": [
+        "Set both pins HIGH",
+        "Give PWM to pin A, 0 to pin B",
+        "Give 0 to pin A, PWM to pin B",
+        "Use Serial.println()"
+      ],
+      "answerIndex": 1,
+      "explanation": "Giving PWM > 0 to pin A and 0 to pin B makes the motor spin backward."
+    },
+    {
+      "id": "l3q7",
+      "question": "Which function is used to send sensor values to the Serial Monitor for debugging?",
+      "options": [
+        "Serial.read()",
+        "Serial.println()",
+        "analogWrite()",
+        "tone()"
+      ],
+      "answerIndex": 1,
+      "explanation": "Serial.println() sends text or numbers to the Serial Monitor."
+    },
+    {
+      "id": "l3q8",
+      "question": "What is the range of PWM values in Arduino’s analogWrite()?",
+      "options": [
+        "0 to 100",
+        "0 to 1023",
+        "0 to 255",
+        "0 to 9999"
+      ],
+      "answerIndex": 2,
+      "explanation": "PWM values range from 0 (off) to 255 (full power)."
+    },
+    {
+      "id": "l3q9",
+      "question": "In the tryThisCode, what does Serial.println(\"Moving forward\"); do?",
+      "options": [
+        "Sends the text 'Moving forward' to the Serial Monitor",
+        "Moves the motor forward",
+        "Prints the motor speed",
+        "Stops the motor"
+      ],
+      "answerIndex": 0,
+      "explanation": "Serial.println(\"Moving forward\"); only prints a message, it doesn’t control the motor directly."
+    },
+    {
+      "id": "l3q10",
+      "question": "If you want the motor to move forward at half speed, what PWM value should you use?",
+      "options": [
+        "128",
+        "255",
+        "64",
+        "9600"
+      ],
+      "answerIndex": 0,
+      "explanation": "Half speed corresponds to about 128 in the 0–255 PWM range."
+    }
+  ]
+}
